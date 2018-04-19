@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const nunjucks = require('nunjucks');
+const routes = require('./routes');
 
 const obj = {
     people: [
@@ -22,21 +23,16 @@ const res = nunjucks.render('index.html', function(err, output) {
     console.log(output);
 })
 
+app.use(express.static('public'));
+
 app.use((req, res, next)=> {
     let route = req.path
     let verb = req.method
     console.log(verb, route)
     next()
-})
-app.get('/',(req, res, next)=>  res.render('index', obj))
-app.get('/news',(req, res, next)=>  res.send('News!'))
+});
 
-
-
-
-
-
-
+app.use('/', routes);
 
 app.listen(3000,()=> console.log('server listening'));
 
